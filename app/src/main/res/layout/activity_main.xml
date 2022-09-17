@@ -4,15 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.main.MainActivity">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/landing_background_images"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/landing_background"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonViewSavedImages"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/poppins_semisold"
+        android:includeFontPadding="false"
+        android:text="@string/saved_images"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonSaveImages"
+        app:cornerRadius="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonEditNewImage"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/poppins_semisold"
+        android:includeFontPadding="false"
+        android:text="@string/edit_new_image"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:backgroundTint="@color/buttonEditNewImage"
+        app:cornerRadius="20sp"
+        app:layout_constraintBottom_toTopOf="@id/buttonViewSavedImages"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/textSubTitle"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="13dp"
+        android:text="@string/let_s_create_something_news"
+        app:layout_constraintBottom_toTopOf="@id/buttonEditNewImage"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textTitle"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/poppins_bold"
+        android:includeFontPadding="false"
+        android:text="@string/image_filters"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/textSubTitle"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
