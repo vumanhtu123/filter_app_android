@@ -5,24 +5,24 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.filterapp.utilities.Coroutines
+import com.example.filterapp.data.ImageFilter
 import com.example.filterapp.repositories.EditImageRepository
+import com.example.filterapp.utilities.Coroutines
 
 class EditImageViewModel(private val editImageRepository: EditImageRepository) : ViewModel() {
+    //region :: prepare image preview
     private val imagePreviewDataState = MutableLiveData<imagePreviewDataSate>()
-    val imagePreviewUiState : LiveData<imagePreviewDataSate> get() = imagePreviewDataState
+    val imagePreviewUiState: LiveData<imagePreviewDataSate> get() = imagePreviewDataState
 
-    fun prepareImagePreview(imageUri: Uri){
+    fun prepareImagePreview(imageUri: Uri) {
         Coroutines.io {
             runCatching {
                 emiImagePreviewUiState(isLoading = true)
                 editImageRepository.prepareImagePreview(imageUri)
             }.onSuccess { bitmap ->
-                if (bitmap != null)
-                {
+                if (bitmap != null) {
                     emiImagePreviewUiState(bitmap = bitmap)
-                }else
-                {
+                } else {
                     emiImagePreviewUiState(error = "Unable image preview")
                 }
             }.onFailure {
@@ -35,7 +35,7 @@ class EditImageViewModel(private val editImageRepository: EditImageRepository) :
         isLoading: Boolean = false,
         bitmap: Bitmap? = null,
         error: String? = null
-    ){
+    ) {
         val dateSate = imagePreviewDataSate(isLoading, bitmap, error)
         imagePreviewDataState.postValue(dateSate)
     }
@@ -46,4 +46,46 @@ class EditImageViewModel(private val editImageRepository: EditImageRepository) :
         val bitmap: Bitmap?,
         val error: String?
     )
+
+    //endregion
+    //region:: Load image filters
+    private val imageFiltersDataState = MutableLiveData<ImageFiltersDataSate>()
+    val imageFiltersUiSate : LiveData<ImageFiltersDataSate> get() = imageFiltersDataState
+
+    fun loadImageFilters(originalImage: Bitmap){
+        Coroutines.io {
+            runCatching {
+                emitImageFiltersUiState(isLoading = true)
+                editImageRepository.getImageFilters(getPreviewImage(originalImage))
+            }.onSuccess { imageFilters ->
+                emitImageFiltersUiState(imageFilters = imageFilters)
+            }.onFailure {
+                emitImageFiltersUiState(error = it.message.toString())
+            }
+        }
+    }
+
+    private fun getPreviewImage(originalImage : Bitmap): Bitmap{
+        return runCatching {
+            val previewWith = 150
+            val previewHeight = originalImage.height * previewWith / originalImage.width
+            Bitmap.createScaledBitmap(originalImage,previewWith,previewHeight,false)
+        }.getOrDefault(originalImage)
+    }
+
+    private fun emitImageFiltersUiState(
+        isLoading: Boolean = false,
+        imageFilters: List<ImageFilter>? = null,
+        error: String? = null
+    ){
+        val dataState = ImageFiltersDataSate(isLoading,imageFilters,error)
+        imageFiltersDataState.postValue(dataState)
+    }
+
+    data class ImageFiltersDataSate(
+        val isLoading: Boolean,
+        val imageFilters: List<ImageFilter>?,
+        val error: String?
+    )
+    //endregion
 }
