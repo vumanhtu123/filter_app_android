@@ -5,4 +5,5 @@
     <string name="let_s_create_something_news">Let\'s create something news !</string>
     <string name="image_filters">Image Filters</string>
     <string name="apply_filter">Apply Filter</string>
+    <string name="save_image">Saved Images</string>
 </resources>

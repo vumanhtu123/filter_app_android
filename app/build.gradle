@@ -51,10 +51,10 @@ dependencies {
     // gpu image
     implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
     //koin Dependency injection
-    implementation 'org.koin:koin-androidx-viewmodel:2.1.0'
+//    implementation 'org.koin:koin-androidx-viewmodel:2.1.0'
+    implementation "io.insert-koin:koin-android:3.2.0"
     //viewmodel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     //image picker
     implementation 'com.github.Drjacky:ImagePicker:2.3.18'
-//    implementation 'com.droidninja:filepicker:2.2.5'
 }

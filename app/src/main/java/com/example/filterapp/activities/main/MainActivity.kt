@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.filterapp.activities.editimage.EditImageActivity
+import com.example.filterapp.activities.savedimage.SavedImagesActivity
 import com.example.filterapp.databinding.ActivityMainBinding
 import com.github.drjacky.imagepicker.ImagePicker
 
@@ -25,6 +26,11 @@ class MainActivity : AppCompatActivity(){
                     .galleryOnly()
                     .createIntent()
             )
+        }
+        binding.buttonViewSavedImages.setOnClickListener {
+            Intent(applicationContext,SavedImagesActivity::class.java).also {
+                startActivity(it)
+            }
         }
     }
             private val launcher =

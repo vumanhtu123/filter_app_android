@@ -1,11 +1,13 @@
 package com.example.filterapp.activities.editimage
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import com.example.filterapp.activities.filteredimage.FilteredImageActivity
 import com.example.filterapp.activities.main.MainActivity
 import com.example.filterapp.apdaters.ImageFiltersAdapter
 import com.example.filterapp.data.ImageFilter
@@ -18,6 +20,11 @@ import jp.co.cyberagent.android.gpuimage.GPUImage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditImageActivity : AppCompatActivity(), ImageFilterListener {
+
+    companion object {
+        const val KEY_FILTERED_IMAGE = "filteredImageUri"
+    }
+
     private lateinit var binding: ActivityEditImageBinding
     private lateinit var gpuImage: GPUImage
 
@@ -36,7 +43,7 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
     }
 
     private fun setUpObservers() {
-        viewModel.imagePreviewUiState.observe(this, {
+        viewModel.imagePreviewUiState.observe(this) {
             val dataState = it ?: return@observe
             binding.previewProgressBar.visibility =
                 if (dataState.isLoading) View.VISIBLE else View.GONE
@@ -55,8 +62,8 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                     displayToast(error)
                 }
             }
-        })
-        viewModel.imageFiltersUiSate.observe(this, {
+        }
+        viewModel.imageFiltersUiSate.observe(this) {
             val imageFiltersDataState = it ?: return@observe
             binding.imageFiltersProgressBar.visibility =
                 if (imageFiltersDataState.isLoading) View.VISIBLE else View.GONE
@@ -69,10 +76,33 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
                     displayToast(error)
                 }
             }
-        })
-        filteredBitmap.observe(this, { bitmap ->
+        }
+        filteredBitmap.observe(this) { bitmap ->
             binding.imagePreview.setImageBitmap(bitmap)
-        })
+        }
+        viewModel.saveFilteredImageUiState.observe( this) {
+            val saveFilteredImageDataState = it ?: return@observe
+            if (saveFilteredImageDataState.isLoading) {
+                binding.imageSave.visibility = View.GONE
+                binding.savingProgressBar.visibility = View.VISIBLE
+            } else {
+                binding.savingProgressBar.visibility = View.GONE
+                binding.imageSave.visibility = View.VISIBLE
+            }
+            saveFilteredImageDataState.uri?.let { savedImageUri ->
+                Intent(
+                    applicationContext,
+                    FilteredImageActivity::class.java
+                ).also { filteredImageIntent ->
+                    filteredImageIntent.putExtra(KEY_FILTERED_IMAGE, savedImageUri)
+                    startActivity(filteredImageIntent)
+                }
+            } ?: kotlin.run {
+                saveFilteredImageDataState.error?.let { error ->
+                    displayToast(error)
+                }
+            }
+        }
     }
 
     private fun prepareImagePreview() {
@@ -96,6 +126,11 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
         binding.imageBack.setOnClickListener {
             onBackPressed()
         }
+        binding.imageSave.setOnClickListener{
+            filteredBitmap.value?.let { bitmap ->
+                viewModel.saveFilteredImage(bitmap)
+            }
+        }
         //This will show original image when we long click the imageView until we release click,
         //So that we can the difference between original image and filtered image
         binding.imagePreview.setOnLongClickListener {
@@ -108,8 +143,8 @@ class EditImageActivity : AppCompatActivity(), ImageFilterListener {
     }
 
     override fun onFilterSelected(imageFilter: ImageFilter) {
-        with(imageFilter){
-            with(gpuImage){
+        with(imageFilter) {
+            with(gpuImage) {
                 setFilter(filter)
                 filteredBitmap.value = bitmapWithFilterApplied
             }
