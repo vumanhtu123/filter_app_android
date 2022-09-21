@@ -65,10 +65,10 @@ class EditImageRepositoryImpl(private val context: Context) : EditImageRepositor
         GPUImageColorMatrixFilter(
             0.9f,
             floatArrayOf(
-                0.4f, 0.6f, 0.5f, 0.0f,
-                0.0f, 0.4f, 1.0f, 1.0f,
-                0.05f, 0.1f, 0.4f, 0.4f,
-                1.0f, 1.0f, 1.0f, 1.0f
+                1.025f, 0.1f, 0.1f, 0.02f,
+                0.0f, 0.9f, 0.1f, 0.1f,
+                0.05f, 0.1f, 0.9f, 0.1f,
+                1.0f, 0.0f, 0.0f, 1.0f,
             )
         ).also { filter ->
             gpuImage.setFilter(filter)
@@ -141,10 +141,10 @@ class EditImageRepositoryImpl(private val context: Context) : EditImageRepositor
         GPUImageColorMatrixFilter(
             1.0f,
             floatArrayOf(
-                1.0f, 0.0f, 0.08f, 0.0f,
-                0.4f, 1.0f, 0.0f, 0.0f,
+                1.022f, 0.0f, 0.08f, 0.0f,
+                0.1f, 1.0f, 0.0f, 0.0f,
                 0.0f, 0.0f, 1.0f, 0.1f,
-                0.0f, 0.0f, 0.0f, 0.1f,
+                0.0f, 0.0f, 0.0f, 1.2f,
             )
         ).also { filter ->
             gpuImage.setFilter(filter)

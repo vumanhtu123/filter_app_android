@@ -26,5 +26,18 @@
         app:tint="@color/white"
         android:id="@+id/fabShare"
         />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white"
+        android:id="@+id/backFilterImage"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
